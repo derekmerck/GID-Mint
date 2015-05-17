@@ -12,11 +12,6 @@ Flask app to create 1-way hashes for study anonymization.
 It is intended to be used as an adjunct with an automatic anonymization framework like [XNAT's](http://www.xnat.org) [DicomEdit](http://nrg.wustl.edu/software/dicomedit/)
 
 
-## Installation
-
-`$ pip install git+https://github.com/derekmerck/GlobalIdMaker`
-
-
 ### Dependencies
 
 - Python 2.7
