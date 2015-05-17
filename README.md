@@ -9,7 +9,7 @@
 
 Flask app to create 1-way hashes for study anonymization.
  
-It is intended to be used as an adjunct with an automatic anonymization framework like XNAT's DICOMEdit.
+It is intended to be used as an adjunct with an automatic anonymization framework like [XNAT's](http://www.xnat.org) [DicomEdit](http://nrg.wustl.edu/software/dicomedit/)
 
 
 ## Installation
@@ -41,8 +41,6 @@ This is the basic functionality, which is simply intended to be unique and can b
 
 e.g., `localhost:5000/aoi?ssn=123456789`
 
-In the future, Given a GSI, an Institutional Subject Identifier (ISI) can be LINKED to it, so querying the ISI returns the subject GSI
-
 
 ### Global Subject Identifier (GSI)
 
@@ -70,7 +68,7 @@ e.g., `localhost:5000/isi?institution=RIH&record_id=mrn100`
 
 ## Acknowledgements
 
-- Based in part on NDAR's GUID as implemented in FITBIR
+- Inspired in part by [NDAR](https://ndar.nih.gov/ndarpublicweb/tools.html) and [FITBIR](https://fitbir.nih.gov) GUID schema.
 
 
 ## License
@@ -82,7 +80,7 @@ e.g., `localhost:5000/isi?institution=RIH&record_id=mrn100`
 ## Future Work
 
 1. Database:
-  - Link an already generated ISI (based on MRN) or AOI to a GSI, so that the GSI always returns the original hash
-  - Check for collisions, query for whether a hash is in use
+  - Link identifiers -- connect an already generated identifier hash to a different hash.  For example, an already generated IRI (based on MRN) could be linked to a new GSI, so relevant GSI queries would return the original IRI hash.
+  - Check for collisions, query for whether a hash is in use (for a given namespace)
 
-2. Translate to NDAR GUID generator
+2. Translate requests directly to the NDAR GUID generator
