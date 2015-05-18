@@ -46,7 +46,6 @@ A GSID is intended to be unique and shared across institutions.
 
 Creating a GSID requires input:
 - `fname` = given name
-- `minitial` = middle initial
 - `lname` = last name
 - `dob` = date of birth (8-digits, xxyyzzzz)
 
@@ -58,7 +57,7 @@ e.g., `localhost:5000/gsi?fname=derek&minitial=l&lname=merck&dob=xxyyzzzz`
 A GIRI is intended to be unique and shared within an institution.
 
 Creating an ISI requires input:
-- `institution` = institution code (RIH, TMH, etc.)
+- `institution` = institution code (Lifespan, etc.)
 - `record_id` = medical or administrative record number
 
 e.g., `localhost:5000/giri?institution=RIH&record_id=mrn100`

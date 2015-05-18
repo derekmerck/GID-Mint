@@ -12,9 +12,11 @@ Dependencies: Flask
 See README.md for usage, notes, and license info.
 
 """
-from flask import Flask, request
+import os
+import markdown
 import logging
 import hashlib
+from flask import Flask, request, render_template, Markup
 
 __package__ = "GID-Mint"
 __description__ = "Flask app to create 1-way hashes for study anonymization"
@@ -36,7 +38,7 @@ app = Flask(__name__)
 
 def check_vars(reqs, args):
     # TODO: Should also check correct format for dob (i.e., xx-yy-zzzz), mrn (i.e., 10 digits at Lifespan), etc.
-    values = []A
+    values = []
     for key in reqs:
         if key not in args:
             # Failed completeness
@@ -55,9 +57,16 @@ def hash_it(values):
     return m.hexdigest()
 
 
+def read(*paths):
+    """Build a file path from *paths* and return the contents."""
+    with open(os.path.join(*paths), 'r') as f:
+        return f.read()
+
 @app.route('/')
-def show_docstring():
-    return __doc__
+def index():
+    content = read('README.md')
+    content = Markup(markdown.markdown(content))
+    return render_template('index.html', **locals())
 
 
 @app.route('/ggid')
@@ -86,10 +95,16 @@ def get_global_subject_id():
     else:
         return "Request has missing variables"
 
-@app.route('ndar')
+@app.route('/ndar')
 def get_ndar_guid():
     # TODO: Add NDAR translator
-    return "NDAR GUID not implemented"
+    return "NDAR GUID translator is not implemented yet"
+
+@app.route('/link')
+def link_hashes():
+    # TODO: Add DB for hash linking
+    return "hash linking is not implemented yet"
+
 
 
 if __name__ == '__main__':
