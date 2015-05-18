@@ -7,14 +7,14 @@
 
 ## Overview
 
-Flask app to create 1-way hashes for global identifiers in study anonymization.
+Python library and Flask app to generate 1-way hashes for globally consistent identifiers in study anonymization.
  
 It is intended to be used as an adjunct with an automatic anonymization framework like [XNAT's](http://www.xnat.org) [DicomEdit](http://nrg.wustl.edu/software/dicomedit/)
 
 A reference web implementation of the most recent master branch is available at <http://get-a-gid.herokuapp.com>.
 
 
-### Dependencies
+## Dependencies
 
 - Python 2.7
 - [Flask](http://flask.pocoo.org)
@@ -22,25 +22,6 @@ A reference web implementation of the most recent master branch is available at 
 
 ## Usage
 
-To create a local instance:
-
-```bash
-$ python GID-Mint.py &  
-  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)  
-$ curl -4 localhost:5000/ggid?name=derek  
-  O2PSXCTVDAGB5DE3G7GLZ6PAJE  
-```
-
-To create a [Heroku](http://www.heroku.com) instance:
-
-```bash
-$ heroku create
-$ git push heroku master
-$ heroku ps:scale web=1
-$ curl "http://get-a-gid.herokuapp.com/ggid?name=derek  
-  O2PSXCTVDAGB5DE3G7GLZ6PAJE 
-```
-  
 To use it as a Python library:
 
 ```python
@@ -50,13 +31,31 @@ To use it as a Python library:
 O2PSXCTVDAGB5DE3G7GLZ6PAJE
 ```
 
+To create a local server instance:
+
+```bash
+$ python GID-Mint.py &  
+  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)  
+$ curl -4 "localhost:5000/ggid?name=derek"
+  O2PSXCTVDAGB5DE3G7GLZ6PAJE  
+```
+
+To create a public [Heroku](http://www.heroku.com) server instance:
+
+```bash
+$ heroku create
+$ git push heroku master
+$ heroku ps:scale web=1
+$ curl "http://get-a-gid.herokuapp.com/ggid?name=derek"
+  O2PSXCTVDAGB5DE3G7GLZ6PAJE 
+```
+
+Single dyno Heroku instances are free to run.
+
 
 ### Generic Global Identifier (GGID)
 
-This is the basic functionality, which is simply intended to be unique and can be generated based on any consistent set object-specific variables.
-
-Example: <http://get-a-gid.herokuapp.com/ggid?name=derek>  
-`O2PSXCTVDAGB5DE3G7GLZ6PAJE`
+This is the basic functionality, which is simply intended to be unique and can be reproducibly generated against any consistent set object-specific variables.
 
 Generation method:
 
@@ -64,12 +63,15 @@ Generation method:
 2. The [md5](http://en.wikipedia.org/wiki/MD5) hash of the result is computed.
 3. The result is encoded into [base32](http://en.wikipedia.org/wiki/Base32) and padding symbols are stripped.
 
+Example: <http://get-a-gid.herokuapp.com/ggid?name=derek>  
+`O2PSXCTVDAGB5DE3G7GLZ6PAJE`
+
 
 ### Global Subject Identifier (GSID)
 
 A GSID is intended to be unique and shared across institutions.
 
-Creating a GSID requires input:
+It is generated as a GGID using specific, required input variables:
 
 - `fname` = given name
 - `lname` = last name
@@ -83,7 +85,7 @@ Creating a GSID requires input:
 
 A GIRI is intended to be unique and shared within an institution.
 
-Creating an ISI requires input:
+It is generated as a GGID using specific, required input variables:
 
 - `institution` = institution code (Lifespan, etc.)
 - `record_id` = medical or administrative record number
@@ -91,10 +93,12 @@ Creating an ISI requires input:
 <http://get-a-gid.herokuapp.com/giri?institution=RIH&record_id=mrn100>  
 `L6G7QENCBUURAFFE75WMG6JDXE`
 
+The `GID_Mint` module knows how to check a set of input variables against a set of required keys, but it has no knowledge of the specific input variables required for a GSID or GIRI.  Relevant requirements must be provided by the accessor: in this case, by the `Get_a_GID` server module based on the `gsid` or `giri` query strings.
+
 
 ## Acknowledgements
 
-- Inspired in part by [NDAR](https://ndar.nih.gov/ndarpublicweb/tools.html) and [FITBIR](https://fitbir.nih.gov) GUID schema.
+- Inspired in part by the [NDAR](https://ndar.nih.gov/ndarpublicweb/tools.html) and [FITBIR](https://fitbir.nih.gov) GUID schema.
 - Thanks for the [Heroku](http://www.heroku.com) Flask tutorials at <http://virantha.com/2013/11/14/starting-a-simple-flask-app-with-heroku/> and <http://stackoverflow.com/questions/17260338/deploying-flask-with-heroku>
 
 
@@ -105,8 +109,8 @@ Creating an ISI requires input:
 
 ## Future Work
 
-- Use a database to link an already generated identifier hash to a different hash.  For example, an already generated MRN-based GIRI could be linked to a new GSID, so relevant GSID queries would return the original GIRI hash.
+- Use a database to link an already generated identifier hash to a different hash.  For example, an already generated MRN-based GIRI could be linked to a new GSID, so relevant GSID queries would return the original GIRI hash.  The main drawback to this is that it would require a single central server.
 
-- Check for collisions in a given namespace and, if needed, create a new hash and link as above
+- Check for collisions in a given namespace and, if needed, create a new hash and link as above.
 
-- Translate requests directly to the NDAR GUID generator
+- Translate requests directly to the NDAR GUID generator.

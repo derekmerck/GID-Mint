@@ -1,1 +1,1 @@
-web: python GID_Mint.py
+web: python Get_a_GID.py
