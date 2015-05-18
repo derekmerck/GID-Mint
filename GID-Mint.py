@@ -16,6 +16,7 @@ import os
 import markdown
 import logging
 import hashlib
+import base64
 from flask import Flask, request, render_template, Markup
 
 __package__ = "GID-Mint"
@@ -37,7 +38,8 @@ app = Flask(__name__)
 
 
 def check_vars(reqs, args):
-    # TODO: Should also check correct format for dob (i.e., xx-yy-zzzz), mrn (i.e., 10 digits at Lifespan), etc.
+    reqs = sorted(reqs)
+    # TODO: Should also check correct format for dob (i.e., xx-yy-zzzz), mrn (i.e., 10 digits at Lifespan), ssn, etc.
     values = []
     for key in reqs:
         if key not in args:
@@ -50,12 +52,11 @@ def check_vars(reqs, args):
 
 
 def hash_it(values):
-    values.sort()
     m = hashlib.md5()
     for val in values:
         m.update(val.lower())
     m.update(salt)
-    return m.hexdigest()
+    return base64.b32encode(m.digest()).strip('=')
 
 
 def read(*paths):
@@ -72,7 +73,9 @@ def index():
 
 @app.route('/ggid')
 def get_generic_global_id():
-    return hash_it(request.args.values())
+    values = [request.args[key] for key in sorted(request.args)]
+    logger.debug(values)
+    return hash_it(values)
 
 
 @app.route('/giri')

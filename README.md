@@ -27,7 +27,7 @@ For a local instance:
 ```
 $ python GID-Mint.py &
   * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-$ wgets  http://localhost:5000/ggid?name=derek_merck&dob=030771
+$ wgets  http://localhost:5000/ggid?name=derek_merck&ssn=123456789
   77d33b6f82dc6482fed324c95754c77e
 ```
 
@@ -37,8 +37,11 @@ This is the basic functionality, which is simply intended to be unique and can b
 
 e.g., `localhost:5000/ggid?ssn=123456789`
 
-For all methods, input variable values are converted to lowercase and sorted into alphabetical order.  Output is the 32-hexdigit [md5](http://en.wikipedia.org/wiki/MD5) hash of the result.
+Generation method:
 
+1. Input variable values are converted to lowercase and sorted into key-alphabetical order.
+2. The [md5](http://en.wikipedia.org/wiki/MD5) hash of the result is computed.
+3. The result is encoded into base32 and padding '=' symbols are stripped.
 
 ### Global Subject Identifier (GSID)
 
@@ -49,7 +52,7 @@ Creating a GSID requires input:
 - `lname` = last name
 - `dob` = date of birth (8-digits, xxyyzzzz)
 
-e.g., `localhost:5000/gsi?fname=derek&minitial=l&lname=merck&dob=xxyyzzzz`
+e.g., `localhost:5000/gsid?fname=derek&lname=merck&dob=01011999`
 
 
 ### Global Institutional Record Identifier (GIRI)
