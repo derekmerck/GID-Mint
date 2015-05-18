@@ -16,17 +16,16 @@ import os
 import logging
 import hashlib
 import base64
-
 from flask import Flask, request, render_template, Markup
 import markdown
 
-__package__ = "GID-Mint"
+__package__ = "GID_Mint"
 __description__ = "Flask app to create 1-way hashes for study anonymization"
-__url__ = "https://github.com/derekmerck/GID-Mint"
+__url__ = "https://github.com/derekmerck/GID_Mint"
 __author__ = 'Derek Merck'
 __email__ = "derek_merck@brown.edu"
 __license__ = "MIT"
-__version_info__ = ('0', '1', '0')
+__version_info__ = ('0', '1', '1')
 __version__ = '.'.join(__version_info__)
 
 
@@ -36,6 +35,19 @@ salt = ''
 # TODO: Add sqlite database in here to keep track of assigned ids and links for a namespace (salting)
 
 app = Flask(__name__)
+
+
+def get_gid(args, reqs=None):
+
+    if reqs:
+        values = check_vars(reqs, args)
+    else:
+        values = [args[key] for key in sorted(args)]
+
+    if values is not None:
+        return hash_it(values)
+    else:
+        return "Request is malformed"
 
 
 def check_vars(reqs, args):
@@ -65,6 +77,7 @@ def read(*paths):
     with open(os.path.join(*paths), 'r') as f:
         return f.read()
 
+
 @app.route('/')
 def index():
     content = read('README.md')
@@ -74,42 +87,31 @@ def index():
 
 @app.route('/ggid')
 def get_generic_global_id():
-    values = [request.args[key] for key in sorted(request.args)]
-    logger.debug(values)
-    return hash_it(values)
+    return get_gid(request.args)
 
 
 @app.route('/giri')
 def get_global_institutional_record_id():
     reqs = ['institution', 'record_id']
-    values = check_vars(reqs, request.args)
-
-    if values is not None:
-        return hash_it(values)
-    else:
-        return "Request has missing variables"
+    return get_gid(request.args, reqs)
 
 
 @app.route('/gsid')
 def get_global_subject_id():
     reqs = ['fname', 'lname', 'dob']
-    vars = check_vars(reqs, request.args)
+    return get_gid(request.args, reqs)
 
-    if vars is not None:
-        return hash_it(vars)
-    else:
-        return "Request has missing variables"
 
 @app.route('/ndar')
 def get_ndar_guid():
     # TODO: Add NDAR translator
     return "NDAR GUID translator is not implemented yet"
 
+
 @app.route('/link')
 def link_hashes():
     # TODO: Add DB for hash linking
-    return "hash linking is not implemented yet"
-
+    return "Hash linking is not implemented yet"
 
 
 if __name__ == '__main__':

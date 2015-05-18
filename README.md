@@ -1,8 +1,8 @@
-# GID-Mint
+# GID_Mint
 
 [Derek Merck](email:derek_merck@brown.edu)  
 
-<https://github.com/derekmerck/GID-Mint>
+<https://github.com/derekmerck/GID_Mint>
 
 
 ## Overview
@@ -22,13 +22,32 @@ A reference web implementation of the most recent master branch is available at 
 
 ## Usage
 
-For a local instance:
+To create a local instance:
 
+```bash
+$ python GID-Mint.py &  
+  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)  
+$ curl -4 localhost:5000/ggid?name=derek  
+  O2PSXCTVDAGB5DE3G7GLZ6PAJE  
 ```
-$ python GID-Mint.py &
-  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-$ curl -4 localhost:5000/ggid?name=derek
-  O2PSXCTVDAGB5DE3G7GLZ6PAJE
+
+To create a [Heroku](http://www.heroku.com) instance:
+
+```bash
+$ heroku create
+$ git push heroku master
+$ heroku ps:scale web=1
+$ curl "http://get-a-gid.herokuapp.com/ggid?name=derek  
+  O2PSXCTVDAGB5DE3G7GLZ6PAJE 
+```
+  
+To use it as a Python library:
+
+```python
+> from GID_Mint import get_gid
+> d = { 'name':'derek' }
+> get_gid( d )
+O2PSXCTVDAGB5DE3G7GLZ6PAJE
 ```
 
 
@@ -36,14 +55,14 @@ $ curl -4 localhost:5000/ggid?name=derek
 
 This is the basic functionality, which is simply intended to be unique and can be generated based on any consistent set object-specific variables.
 
-Example: <http://get-a-gid.herokuapp.com/ggid?name=derek>
+Example: <http://get-a-gid.herokuapp.com/ggid?name=derek>  
 `O2PSXCTVDAGB5DE3G7GLZ6PAJE`
 
 Generation method:
 
 1. Input variable values are converted to lowercase and sorted into key-alphabetical order.
 2. The [md5](http://en.wikipedia.org/wiki/MD5) hash of the result is computed.
-3. The result is encoded into base32 and padding '=' symbols are stripped.
+3. The result is encoded into [base32](http://en.wikipedia.org/wiki/Base32) and padding symbols are stripped.
 
 
 ### Global Subject Identifier (GSID)
@@ -51,11 +70,12 @@ Generation method:
 A GSID is intended to be unique and shared across institutions.
 
 Creating a GSID requires input:
+
 - `fname` = given name
 - `lname` = last name
 - `dob` = date of birth (8-digits, xxyyzzzz)
 
-<http://get-a-gid.herokuapp.com/gsid?fname=derek&lname=merck&dob=01011999>
+<http://get-a-gid.herokuapp.com/gsid?fname=derek&lname=merck&dob=01011999>  
 `AXC3YH4QZE54EYBUFSHKQNAO4A`
 
 
@@ -64,17 +84,18 @@ Creating a GSID requires input:
 A GIRI is intended to be unique and shared within an institution.
 
 Creating an ISI requires input:
+
 - `institution` = institution code (Lifespan, etc.)
 - `record_id` = medical or administrative record number
 
-<http://get-a-gid.herokuapp.com/giri?institution=RIH&record_id=mrn100>
+<http://get-a-gid.herokuapp.com/giri?institution=RIH&record_id=mrn100>  
 `L6G7QENCBUURAFFE75WMG6JDXE`
 
 
 ## Acknowledgements
 
 - Inspired in part by [NDAR](https://ndar.nih.gov/ndarpublicweb/tools.html) and [FITBIR](https://fitbir.nih.gov) GUID schema.
-- Thanks for the Heroku Flask tutorial at <http://virantha.com/2013/11/14/starting-a-simple-flask-app-with-heroku/> and <http://stackoverflow.com/questions/17260338/deploying-flask-with-heroku>
+- Thanks for the [Heroku](http://www.heroku.com) Flask tutorials at <http://virantha.com/2013/11/14/starting-a-simple-flask-app-with-heroku/> and <http://stackoverflow.com/questions/17260338/deploying-flask-with-heroku>
 
 
 ## License
