@@ -123,4 +123,6 @@ if __name__ == '__main__':
     logger.addHandler(ch)
     logger.info('version %s' % __version__)
 
-    app.run()
+    # This works nicely with heroku
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
