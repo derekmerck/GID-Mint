@@ -13,11 +13,12 @@ See README.md for usage, notes, and license info.
 
 """
 import os
-import markdown
 import logging
 import hashlib
 import base64
+
 from flask import Flask, request, render_template, Markup
+import markdown
 
 __package__ = "GID-Mint"
 __description__ = "Flask app to create 1-way hashes for study anonymization"
