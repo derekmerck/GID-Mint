@@ -50,6 +50,7 @@ def check_vars(reqs, args):
 
 
 def hash_it(values):
+    values.sort()
     m = hashlib.md5()
     for val in values:
         m.update(val.lower())
