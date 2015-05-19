@@ -1,7 +1,8 @@
 import os
 from flask import Flask, request, render_template, Markup
 import markdown
-from GID_Mint import *
+import GID_Mint
+from GID_Mint import logger, get_gid
 
 
 def read(*paths):
@@ -16,8 +17,15 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     content = read('README.md')
-    content = Markup(markdown.markdown(content))
+    content = content + "\n\nversion {0}".format(GID_Mint.__version__)
+    content = Markup(markdown.markdown(content, ['markdown.extensions.extra']))
     return render_template('index.html', **locals())
+
+
+@app.route('/version')
+def version():
+    logger.info(GID_Mint.__version__)
+    return "version {0}".format(GID_Mint.__version__)
 
 
 @app.route('/ggid')

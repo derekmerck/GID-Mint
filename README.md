@@ -24,12 +24,12 @@ A reference web implementation of the most recent master branch is available at 
 
 To use it as a Python library:
 
-```python
-> from GID_Mint import get_gid
-> d = { 'name':'derek' }
-> get_gid( d )
+````python
+>>> from GID_Mint import get_gid
+>>> d = { 'name':'derek' }
+>>> get_gid( d )
 O2PSXCTVDAGB5DE3G7GLZ6PAJE
-```
+````
 
 To create a local server instance:
 
@@ -100,6 +100,7 @@ The `GID_Mint` module knows how to check a set of input variables against a set 
 
 - Inspired in part by the [NDAR](https://ndar.nih.gov/ndarpublicweb/tools.html) and [FITBIR](https://fitbir.nih.gov) GUID schema.
 - Thanks for the [Heroku](http://www.heroku.com) Flask tutorials at <http://virantha.com/2013/11/14/starting-a-simple-flask-app-with-heroku/> and <http://stackoverflow.com/questions/17260338/deploying-flask-with-heroku>
+- GitHub markdown css from <https://github.com/sindresorhus/github-markdown-css>
 
 
 ## License
