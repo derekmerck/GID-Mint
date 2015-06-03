@@ -8,10 +8,11 @@
 ## Overview
 
 Python library and Flask app to generate 1-way hashes for globally consistent identifiers in study anonymization.
- 
-It is intended to be used as an adjunct with an automatic anonymization framework like [XNAT's](http://www.xnat.org) [DicomEdit](http://nrg.wustl.edu/software/dicomedit/)
 
 A reference web implementation of the most recent master branch is available at <http://get-a-gid.herokuapp.com>.
+
+It is intended to be used as an adjunct with an automatic anonymization framework like [XNAT's](http://www.xnat.org) [DicomEdit](http://nrg.wustl.edu/software/dicomedit/).  A reference anonymization script using get-a-gid is available here: <https://gist.github.com/derekmerck/5d4f40a7b952525a09c4>.
+
 
 
 ## Dependencies
@@ -28,7 +29,7 @@ To use it as a Python library:
 >>> from GID_Mint import get_gid
 >>> d = { 'name':'derek' }
 >>> get_gid( d )
-O2PSXCTVDAGB5DE3G7GLZ6PAJE
+DNWW3CYGDP6RI
 ````
 
 To create a local server instance:
@@ -37,7 +38,7 @@ To create a local server instance:
 $ python GID-Mint.py &  
   * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)  
 $ curl -4 "localhost:5000/ggid?name=derek"
-  O2PSXCTVDAGB5DE3G7GLZ6PAJE  
+  DNWW3CYGDP6RI  
 ```
 
 To create a public [Heroku](http://www.heroku.com) server instance:
@@ -47,24 +48,24 @@ $ heroku create
 $ git push heroku master
 $ heroku ps:scale web=1
 $ curl "http://get-a-gid.herokuapp.com/ggid?name=derek"
-  O2PSXCTVDAGB5DE3G7GLZ6PAJE 
+  DNWW3CYGDP6RI 
 ```
 
-Single dyno Heroku instances are free to run.
+Single dyno Heroku instances are free to run, but can take a minute to startup after they fall asleep.
 
 
 ### Generic Global Identifier (GGID)
 
-This is the basic functionality, which is simply intended to be unique and can be reproducibly generated against any consistent set object-specific variables.
+This is the basic functionality, which is simply intended to be a unique and reproducibly generated tag against any consistent set object-specific variables.
 
 Generation method:
 
 1. Input variable values are converted to lowercase and sorted into key-alphabetical order.
-2. The [md5](http://en.wikipedia.org/wiki/MD5) hash of the result is computed.
+2. The [sha256](http://en.wikipedia.org/wiki/Secure_Hash_Algorithm) hash of the result is computed.  By default only the 64 bit prefix is used.
 3. The result is encoded into [base32](http://en.wikipedia.org/wiki/Base32) and padding symbols are stripped.
 
 Example: <http://get-a-gid.herokuapp.com/ggid?name=derek>  
-`O2PSXCTVDAGB5DE3G7GLZ6PAJE`
+`DNWW3CYGDP6RI`
 
 
 ### Global Subject Identifier (GSID)
@@ -78,14 +79,17 @@ It is generated as a GGID using specific, required input variables:
 - `dob` = date of birth (8-digits, xxyyzzzz)
 
 <http://get-a-gid.herokuapp.com/gsid?fname=derek&lname=merck&dob=01011999>  
-`AXC3YH4QZE54EYBUFSHKQNAO4A`
+`IB5B35HEFBLUW`
 
-It is also possible to pass in a [DICOM patient name format][pname_fmt] directly, and GID_Mint will parse it properly.
+It is also possible to pass in a [DICOM patient name format][pname_fmt] directly, and GID_Mint will parse the first and last name properly.
+
+- `pname` = [last^first^ignored^^]
+- `dob` = date of birth (8-digits, xxyyzzzz)
 
 [pname_fmt]:(http://support.dcmtk.org/docs/classDcmPersonName.html#f8ee9288b91b6842e4417185d548cda9)
 
 <http://get-a-gid.herokuapp.com/gsid?pname=Merck^Derek^^^&dob=01011999>  
-`AXC3YH4QZE54EYBUFSHKQNAO4A`
+`IB5B35HEFBLUW`
 
 ### Global Institutional Record Identifier (GIRI)
 
@@ -96,22 +100,32 @@ It is generated as a GGID using specific, required input variables:
 - `institution` = institution code (Lifespan, etc.)
 - `record_id` = medical or administrative record number
 
-<http://get-a-gid.herokuapp.com/giri?institution=RIH&record_id=mrn100>  
-`L6G7QENCBUURAFFE75WMG6JDXE`
+<http://get-a-gid.herokuapp.com/giri?institution=RIH&record_id=111222333>  
+`UVTUX5EZUC34C`
 
 The `GID_Mint` module knows how to check a set of input variables against a set of required keys, but it has no knowledge of the specific input variables required for a GSID or GIRI.  Relevant requirements must be provided by the accessor: in this case, by the `Get_a_GID` server module based on the `gsid` or `giri` query strings.
 
 
-### Placeholder Patient Name Generator
+### ppname: Placeholder Patient Name
 
-Any base32 string with at least 5 values can be used to reproducibly generate a ["John Doe"](http://en.wikipedia.org/wiki/John_Doe) style placeholder name in [DICOM patient name format][pname_fmt].  This is very useful for referencing anonymized data sets according to memorable names.  The algorithm uses only the first 5 base32 A-Z,2-7 values, so there are $32^5$ possible combinations.  
+Any base32 string with at least 5 values can be used to reproducibly generate a ["John Doe"](http://en.wikipedia.org/wiki/John_Doe) style placeholder name in [DICOM patient name format][pname_fmt].  This is very useful for alphabetizing subject name lists according to generic ID and for referencing anonymized data sets according to memorable names.  The algorithm uses only the first 5 base32 A-Z,2-7 values, so there are 32^5 ~ 2^25 possible combinations.  
 
-By default the placeholder names are based on Shakespearean characters.  This map omits 12 values, so there are only $32*32*32*26*26=22,151,168$ combinations.
+By default the placeholder names are based on Shakespearean characters.  This map omits 12 values, so there are only about 2^24 possible combinations.
 
-<http://get-a-gid.herokuapp.com/pname?ggid=AXC3YH4QZE54EYBUFSHKQNAO4A>  
-`Andronicus^Xanthippe^C^^of York`
+<http://get-a-gid.herokuapp.com/ppname?ggid=IB5B35HEFBLUW>  
+`Iago^Berowne^^Beadle^III`
 
 The default name map can be easily replaced to match your fancy.
+
+
+### yob: Date of Birth to Year of Birth
+
+An 8-digit date of birth can be converted into a 4-digit year of birth placeholder.
+
+- `dob` = date of birth (8-digits, xxyyzzzz)
+
+<http://get-a-gid.herokuapp.com/yob?dob=01011999>  
+`1999`
 
 
 ## Acknowledgements
