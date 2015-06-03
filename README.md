@@ -106,19 +106,21 @@ It is generated as a GGID using specific, required input variables:
 The `GID_Mint` module knows how to check a set of input variables against a set of required keys, but it has no knowledge of the specific input variables required for a GSID or GIRI.  Relevant requirements must be provided by the accessor: in this case, by the `Get_a_GID` server module based on the `gsid` or `giri` query strings.
 
 
-### ppname: Placeholder Patient Name
+### Placeholder Patient Name (PPNAME)
 
 Any base32 string with at least 5 values can be used to reproducibly generate a ["John Doe"](http://en.wikipedia.org/wiki/John_Doe) style placeholder name in [DICOM patient name format][pname_fmt].  This is very useful for alphabetizing subject name lists according to generic ID and for referencing anonymized data sets according to memorable names.  The algorithm uses only the first 5 base32 A-Z,2-7 values, so there are 32^5 ~ 2^25 possible combinations.  
 
 By default the placeholder names are based on Shakespearean characters.  This map omits 12 values, so there are only about 2^24 possible combinations.
 
-<http://get-a-gid.herokuapp.com/ppname?ggid=IB5B35HEFBLUW>  
+- `gid` = At least 5 characters from the base32 character set A-Z,2-7
+
+<http://get-a-gid.herokuapp.com/ppname?gid=IB5B35HEFBLUW>  
 `Iago^Berowne^^Beadle^III`
 
 The default name map can be easily replaced to match your fancy.
 
 
-### yob: Date of Birth to Year of Birth
+### Date of Birth to Year of Birth (YOB)
 
 An 8-digit date of birth can be converted into a 4-digit year of birth placeholder.
 

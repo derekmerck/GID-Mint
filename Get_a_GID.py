@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, render_template, Markup
 import markdown
 import GID_Mint
-from GID_Mint import logger, get_gid
+from GID_Mint import logger, get_gid, get_yob_for_dob, get_pname_for_gid
 
 
 def read(*paths):
@@ -32,9 +32,6 @@ def version():
 def get_generic_global_id():
     return get_gid(request.args)
 
-@app.route('/pname_for_ggid')
-def get_patient_name_for_generic_global_id():
-    return get_pname_for_gid(request.args)
 
 @app.route('/giri')
 def get_global_institutional_record_id():
@@ -46,6 +43,16 @@ def get_global_institutional_record_id():
 def get_global_subject_id():
     reqs = ['fname', 'lname', 'dob']
     return get_gid(request.args, reqs)
+
+
+@app.route('/ppname')
+def get_placeholder_pname():
+    return get_pname_for_gid(request.args)
+
+
+@app.route('/yob')
+def get_placeholder_yob():
+    return get_yob_for_dob(request.args)
 
 
 @app.route('/ndar')
