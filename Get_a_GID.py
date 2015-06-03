@@ -32,6 +32,9 @@ def version():
 def get_generic_global_id():
     return get_gid(request.args)
 
+@app.route('/pname_for_ggid')
+def get_patient_name_for_generic_global_id():
+    return get_pname_for_gid(request.args)
 
 @app.route('/giri')
 def get_global_institutional_record_id():
