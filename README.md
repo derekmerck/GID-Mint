@@ -88,7 +88,7 @@ It is also possible to pass in a [DICOM patient name format][pname_fmt] directly
 
 [pname_fmt]:(http://support.dcmtk.org/docs/classDcmPersonName.html#f8ee9288b91b6842e4417185d548cda9)
 
-<http://get-a-gid.herokuapp.com/gsid?pname=Merck^Derek^^^&dob=01011999>  
+<http://get-a-gid.herokuapp.com/gsid?pname=Merck%5EDerek%5E%5E%5E&dob=01011999>  
 `IB5B35HEFBLUW`
 
 ### Global Institutional Record Identifier (GIRI)

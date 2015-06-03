@@ -79,7 +79,10 @@ def get_yob_for_dob(args):
         return "Request is malformed"
 
 
-def get_gid(args, reqs=None):
+def get_gid(_args, reqs=None):
+
+    # _args is immutable
+    args = _args.copy()
 
     # Parse 'pname' into 'fname' and 'lname' if it is declared in args
     if args.get('pname') is not None:
