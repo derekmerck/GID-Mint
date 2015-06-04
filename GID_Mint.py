@@ -106,12 +106,13 @@ def get_gid(_args, reqs=None):
         logger.warn(args)
 
         if args.get('pname') is u'':
-            args['pname'] = 'ABCDEFGHIJ^12345678901'
-
-        args['lname'], args['fname'] = args['pname'].split('^')[:2]
-        # Do some clean up
-        args['lname'] = args['lname'].split(' ')[0]  # Get rid of any suffix
-        args['fname'] = args['fname'].split(' ')[0]  # Get rid of any middle initial
+            args['lname'] = ''
+            args['fname'] = ''
+        else:
+            args['lname'], args['fname'] = args['pname'].split('^')[:2]
+            # Do some clean up
+            args['lname'] = args['lname'].split(' ')[0]  # Get rid of any suffix
+            args['fname'] = args['fname'].split(' ')[0]  # Get rid of any middle initial
         del args['pname']
 
     if reqs:
@@ -189,7 +190,7 @@ if __name__ == '__main__':
     logger.info(gid)
     logger.info(get_pmdname_for_gid({'gid': gid}))
 
-    args = {'pname': ''}
+    args = {}
     gid = get_gid(args)
     logger.info(args)
     logger.info(gid)

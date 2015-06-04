@@ -131,6 +131,11 @@ The default name map is based on children's book authors.
 <http://get-a-gid.herokuapp.com/pmdname?gid=IB5B35HEFBLUW>  
 `Irving^B^^^5D`
 
+The ggid of an empty empty argument set (such as an empty `pname`) will be `4OYMIQUY7QOBI` which will map to the placeholder name _O. Forbes yH_.
+
+<http://get-a-gid.herokuapp.com/pmdname?gid=4OYMIQUY7QOBI>
+`Forbes^O^^^yH`
+
 
 ### Date of Birth to Year of Birth (YOB)
 
