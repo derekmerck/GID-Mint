@@ -103,7 +103,9 @@ def get_gid(_args, reqs=None):
     # Parse 'pname' into 'fname' and 'lname' if it is declared in args
     if args.get('pname') is not None:
 
-        if args.get('pname') is '':
+        logger.warn(args)
+
+        if args.get('pname') is u'':
             args['pname'] = 'ABCDEFGHIJ^12345678901'
 
         args['lname'], args['fname'] = args['pname'].split('^')[:2]
