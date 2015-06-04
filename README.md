@@ -35,7 +35,7 @@ DNWW3CYGDP6RI
 To create a local server instance:
 
 ```bash
-$ python GID-Mint.py &  
+$ python Get_a_Gid.py &  
   * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)  
 $ curl -4 "localhost:5000/ggid?name=derek"
   DNWW3CYGDP6RI  
