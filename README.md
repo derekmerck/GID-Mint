@@ -128,23 +128,24 @@ Returns a placeholder physician name.  It uses only the first 3 base32 character
 
 The default name map is based on children's book authors.
 
-<http://get-a-gid.herokuapp.com/pmdname?gid=IB5B35HEFBLUW>  
+<http://get-a-gid.herokuapp.com/pmdname?gid=AUUNVBGA5JKUE>  
 `Andersen^U^^^UFO`
 
 The ggid of an empty empty argument set (such as an empty `pname`) will be `4OYMIQUY7QOBI` which will map to the placeholder name _O. Forbes yH_.
 
-<http://get-a-gid.herokuapp.com/pmdname?gid=4OYMIQUY7QOBI>
+<http://get-a-gid.herokuapp.com/pmdname?gid=4OYMIQUY7QOBI>  
 `Forbes^O^^^yH`
 
 
-### Date of Birth to Year of Birth (YOB)
+### Placeholder Date of Birth (PDOB)
 
-An 8-digit date of birth can be converted into a 4-digit year of birth placeholder.
+An 8-digit date of birth can be converted into a random placeholder date from the same year.  This is useful for keeping an approximate patient age available in a data browser.
 
 - `dob` = date of birth (8-digits, yyyymmdd)
+- `gid` = Any reference string can be used to generate a random date in the year given by the `dob`.  Using the patient `gsid` will generate a reproducable placeholder date per subject.
 
-<http://get-a-gid.herokuapp.com/yob?dob=19710101>  
-`1971`
+<http://get-a-gid.herokuapp.com/pdob?dob=19710101&gid=AUUNVBGA5JKUE>  
+`19710830`
 
 
 ## Acknowledgements

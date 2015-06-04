@@ -85,12 +85,23 @@ def get_pmdname_for_gid(args):
     else:
         return "Request is malformed"
 
+from datetime import date
+import struct
 
-def get_yob_for_dob(args):
+def get_pdob_for_dob_and_gid(args):
     # TODO: Need some better error checking
     dob = args.get('dob')
-    if dob is not None:
-        return dob[:4]
+    gid = args.get('gid')
+    if dob is not None and gid is not None:
+        year = int(dob[:4])
+        start_date = date(day=1, month=1, year=year).toordinal()
+        end_date = date(day=31, month=12, year=year).toordinal()
+        [number] = struct.unpack("<H", hashlib.sha256(gid).digest()[:2])
+        t = number / float(0xFFFF)
+        dif = end_date - start_date
+        random_day =int(start_date + t * dif)
+        new_dob = date.fromordinal(random_day)
+        return new_dob.strftime('%Y%m%d')
     else:
         return "Request is malformed"
 
@@ -102,9 +113,6 @@ def get_gid(_args, reqs=None):
 
     # Parse 'pname' into 'fname' and 'lname' if it is declared in args
     if args.get('pname') is not None:
-
-        logger.warn(args)
-
         args['lname'] = ''
         args['fname'] = ''
 
@@ -184,7 +192,7 @@ if __name__ == '__main__':
     logger.info(gid)
     logger.info(get_pname_for_gid({'gid': gid}))
 
-    logger.info(get_yob_for_dob(args))
+    logger.info(get_pdob_for_dob_and_gid({'gid': gid, 'dob': '19710101'}))
 
     args = {'institution': 'RIH', 'record_id': '111222333'}
     gid = get_gid(args)
