@@ -93,6 +93,9 @@ def get_pdob_for_dob_and_gid(args):
     dob = args.get('dob')
     gid = args.get('gid')
     if dob is not None and gid is not None:
+        if len(dob) < 4:
+            # This thing is empty or malformed, so return something obviously wrong
+            return '19000101'
         year = int(dob[:4])
         start_date = date(day=1, month=1, year=year).toordinal()
         end_date = date(day=31, month=12, year=year).toordinal()
