@@ -78,8 +78,8 @@ It is generated as a GGID using specific, required input variables:
 - `lname` = last name
 - `dob` = date of birth (8-digits, xxyyzzzz)
 
-<http://get-a-gid.herokuapp.com/gsid?fname=derek&lname=merck&dob=01011999>  
-`IB5B35HEFBLUW`
+<http://get-a-gid.herokuapp.com/gsid?fname=derek&lname=merck&dob=19710101>  
+`AUUNVBGA5JKUE`
 
 It is also possible to pass in a [DICOM patient name format][pname_fmt] directly, and GID_Mint will parse the first and last name properly.
 
@@ -88,8 +88,8 @@ It is also possible to pass in a [DICOM patient name format][pname_fmt] directly
 
 [pname_fmt]:(http://support.dcmtk.org/docs/classDcmPersonName.html#f8ee9288b91b6842e4417185d548cda9)
 
-<http://get-a-gid.herokuapp.com/gsid?pname=Merck%5EDerek%5E%5E%5E&dob=01011999>  
-`IB5B35HEFBLUW`
+<http://get-a-gid.herokuapp.com/gsid?pname=Merck%5EDerek%5E%5E%5E&dob=19710101>  
+`AUUNVBGA5JKUE`
 
 ### Global Institutional Record Identifier (GIRI)
 
@@ -110,12 +110,12 @@ The `GID_Mint` module knows how to check a set of input variables against a set 
 
 Any base32 string with at least 5 values can be used to reproducibly generate a ["John Doe"](http://en.wikipedia.org/wiki/John_Doe) style placeholder name in [DICOM patient name format][pname_fmt].  This is very useful for alphabetizing subject name lists according to generic ID and for referencing anonymized data sets according to memorable names.  The algorithm uses only the first 5 base32 A-Z,2-7 values, so there are 32^5 ~ 2^25 possible combinations.  
 
-By default the placeholder names are based on Shakespearean characters.  This map omits 12 values, so there are only about 2^24 possible combinations.
+By default the placeholder names are based on Shakespearean characters.
 
 - `gid` = At least 5 characters from the base32 character set A-Z,2-7
 
-<http://get-a-gid.herokuapp.com/ppname?gid=IB5B35HEFBLUW>  
-`Iago^Berowne^^Beadle^III`
+<http://get-a-gid.herokuapp.com/ppname?gid=AUUNVBGA5JKUE>  
+`Andronicus^Ulysses^U^Nurse^of Verona`
 
 The default name map can be easily replaced to match your fancy.
 
@@ -129,7 +129,7 @@ Returns a placeholder physician name.  It uses only the first 3 base32 character
 The default name map is based on children's book authors.
 
 <http://get-a-gid.herokuapp.com/pmdname?gid=IB5B35HEFBLUW>  
-`Irving^B^^^5D`
+`Andersen^U^^^UFO`
 
 The ggid of an empty empty argument set (such as an empty `pname`) will be `4OYMIQUY7QOBI` which will map to the placeholder name _O. Forbes yH_.
 
@@ -141,10 +141,10 @@ The ggid of an empty empty argument set (such as an empty `pname`) will be `4OYM
 
 An 8-digit date of birth can be converted into a 4-digit year of birth placeholder.
 
-- `dob` = date of birth (8-digits, xxyyzzzz)
+- `dob` = date of birth (8-digits, yyyymmdd)
 
-<http://get-a-gid.herokuapp.com/yob?dob=01011999>  
-`1999`
+<http://get-a-gid.herokuapp.com/yob?dob=19710101>  
+`1971`
 
 
 ## Acknowledgements

@@ -90,7 +90,7 @@ def get_yob_for_dob(args):
     # TODO: Need some better error checking
     dob = args.get('dob')
     if dob is not None:
-        return dob[4:]
+        return dob[:4]
     else:
         return "Request is malformed"
 
@@ -166,19 +166,19 @@ if __name__ == '__main__':
     logger.info(gid)
     logger.info(get_pname_for_gid({'gid': gid}))
 
-    args = {'pname': 'Merck^Derek^L^^', 'dob': '01011999'}
+    args = {'pname': 'Merck^Derek^L^^', 'dob': '19710101'}
     gid = get_gid(args)
     logger.info(args)
     logger.info(gid)
     logger.info(get_pname_for_gid({'gid': gid}))
 
-    args = {'pname': 'Merck PhD^Derek L^^^', 'dob': '01011999'}
+    args = {'pname': 'Merck PhD^Derek L^^^', 'dob': '19710101'}
     gid = get_gid(args)
     logger.info(args)
     logger.info(gid)
     logger.info(get_pname_for_gid({'gid': gid}))
 
-    args = {'fname': 'Derek', 'lname': 'Merck', 'dob': '01011999'}
+    args = {'fname': 'Derek', 'lname': 'Merck', 'dob': '19710101'}
     gid = get_gid(args)
     logger.info(args)
     logger.info(gid)
@@ -191,7 +191,7 @@ if __name__ == '__main__':
     logger.info(args)
     logger.info(gid)
 
-    args = {'pname': 'Merck PhD^Derek', 'dob': '01011999'}
+    args = {'pname': 'Merck PhD^Derek', 'dob': '19710101'}
     gid = get_gid(args)
     logger.info(args)
     logger.info(gid)
