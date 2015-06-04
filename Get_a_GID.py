@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, render_template, Markup
 import markdown
 import GID_Mint
-from GID_Mint import logger, get_gid, get_yob_for_dob, get_pname_for_gid
+from GID_Mint import logger, get_gid, get_yob_for_dob, get_pname_for_gid, get_pmdname_for_gid
 
 
 def read(*paths):
@@ -48,6 +48,11 @@ def get_global_subject_id():
 @app.route('/ppname')
 def get_placeholder_pname():
     return get_pname_for_gid(request.args)
+
+
+@app.route('/pmdname')
+def get_placeholder_pmdname():
+    return get_pmdname_for_gid(request.args)
 
 
 @app.route('/yob')

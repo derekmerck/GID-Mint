@@ -120,6 +120,18 @@ By default the placeholder names are based on Shakespearean characters.  This ma
 The default name map can be easily replaced to match your fancy.
 
 
+### Placeholder Physician Name (PMDNAME)
+
+Returns a placeholder physician name.  It uses only the first 3 base32 characters, so there are relatively few combinations.
+
+- `gid` = At least 3 characters from the base32 character set A-Z,2-7
+
+The default name map is based on children's book authors.
+
+<http://get-a-gid.herokuapp.com/pmdname?gid=IB5B35HEFBLUW>  
+`Irving^B^^^5D`
+
+
 ### Date of Birth to Year of Birth (YOB)
 
 An 8-digit date of birth can be converted into a 4-digit year of birth placeholder.

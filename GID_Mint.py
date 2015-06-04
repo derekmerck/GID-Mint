@@ -62,9 +62,24 @@ def get_pname_for_gid(args):
         return'^'.join([
             names_dict[gid[0]]['Last'],
             names_dict[gid[1]]['First'],
-            names_dict[gid[2]]['Middle'],
+            names_dict[gid[2]]['Initial'],
             names_dict[gid[3]]['Prefix'],
             names_dict[gid[4]]['Suffix']
+            ])
+    else:
+        return "Request is malformed"
+
+def get_pmdname_for_gid(args):
+    # Placeholder for ordering physician name, "F Last DeG"
+    # TODO: Need some better error checking
+    gid = args.get('gid')
+    if gid is not None:
+        return'^'.join([
+            names_dict[gid[0]]['Author'],
+            names_dict[gid[1]]['Initial'],
+            '',
+            '',
+            names_dict[gid[2]]['Degree']
             ])
     else:
         return "Request is malformed"
@@ -87,6 +102,9 @@ def get_gid(_args, reqs=None):
     # Parse 'pname' into 'fname' and 'lname' if it is declared in args
     if args.get('pname') is not None:
         args['lname'], args['fname'] = args['pname'].split('^')[:2]
+        # Do some clean up
+        args['lname'] = args['lname'].split(' ')[0]  # Get rid of any suffix
+        args['fname'] = args['fname'].split(' ')[0]  # Get rid of any middle initial
         del args['pname']
 
     if reqs:
@@ -139,6 +157,12 @@ if __name__ == '__main__':
     logger.info(gid)
     logger.info(get_pname_for_gid({'gid': gid}))
 
+    args = {'pname': 'Merck PhD^Derek L^^^', 'dob': '01011999'}
+    gid = get_gid(args)
+    logger.info(args)
+    logger.info(gid)
+    logger.info(get_pname_for_gid({'gid': gid}))
+
     args = {'fname': 'Derek', 'lname': 'Merck', 'dob': '01011999'}
     gid = get_gid(args)
     logger.info(args)
@@ -151,3 +175,9 @@ if __name__ == '__main__':
     gid = get_gid(args)
     logger.info(args)
     logger.info(gid)
+
+    args = {'pname': 'Merck PhD^Derek', 'dob': '01011999'}
+    gid = get_gid(args)
+    logger.info(args)
+    logger.info(gid)
+    logger.info(get_pmdname_for_gid({'gid': gid}))
