@@ -105,14 +105,21 @@ def get_gid(_args, reqs=None):
 
         logger.warn(args)
 
+        args['lname'] = ''
+        args['fname'] = ''
+
         if args.get('pname') is u'':
-            args['lname'] = ''
-            args['fname'] = ''
-        else:
+            pass
+        elif len(args.get('pname').split('^')) > 1:
+            # Plausible DICOM format
             args['lname'], args['fname'] = args['pname'].split('^')[:2]
             # Do some clean up
             args['lname'] = args['lname'].split(' ')[0]  # Get rid of any suffix
             args['fname'] = args['fname'].split(' ')[0]  # Get rid of any middle initial
+        else:
+            # Just stash it
+            args['lname'] = args['pname']
+
         del args['pname']
 
     if reqs:
@@ -185,6 +192,12 @@ if __name__ == '__main__':
     logger.info(gid)
 
     args = {'pname': 'Merck PhD^Derek', 'dob': '01011999'}
+    gid = get_gid(args)
+    logger.info(args)
+    logger.info(gid)
+    logger.info(get_pmdname_for_gid({'gid': gid}))
+
+    args = {'pname': 'derek merck'}
     gid = get_gid(args)
     logger.info(args)
     logger.info(gid)
