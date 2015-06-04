@@ -69,6 +69,7 @@ def get_pname_for_gid(args):
     else:
         return "Request is malformed"
 
+
 def get_pmdname_for_gid(args):
     # Placeholder for ordering physician name, "F Last DeG"
     # TODO: Need some better error checking
@@ -101,6 +102,10 @@ def get_gid(_args, reqs=None):
 
     # Parse 'pname' into 'fname' and 'lname' if it is declared in args
     if args.get('pname') is not None:
+
+        if args.get('pname') is '':
+            args['pname'] = 'ABCDEFGHIJ^12345678901'
+
         args['lname'], args['fname'] = args['pname'].split('^')[:2]
         # Do some clean up
         args['lname'] = args['lname'].split(' ')[0]  # Get rid of any suffix
@@ -177,6 +182,12 @@ if __name__ == '__main__':
     logger.info(gid)
 
     args = {'pname': 'Merck PhD^Derek', 'dob': '01011999'}
+    gid = get_gid(args)
+    logger.info(args)
+    logger.info(gid)
+    logger.info(get_pmdname_for_gid({'gid': gid}))
+
+    args = {'pname': ''}
     gid = get_gid(args)
     logger.info(args)
     logger.info(gid)
